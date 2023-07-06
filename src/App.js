@@ -66,6 +66,7 @@ import DetailPayslip from "./components/payroll/PayslipDetail";
 import UserPrivateRoute from "./components/PrivateRoutes/UserPrivateRoute";
 import AddAward from "./components/award/AddAward";
 import GetAllAward from "./components/award/GetAllAward";
+import MainLayout from "./components/tasks/MainLayout";
 
 function App() {
   return (
@@ -169,6 +170,11 @@ function App() {
             <Route element={<UserPrivateRoute permission={"read-shift"} />}>
               <Route path="/admin/shift" element={<Shift />} />
               <Route path="/admin/shift/:id" element={<DetailShift />} />
+            </Route>
+            {/* === === === Task Routes === === === */}
+            <Route element={<UserPrivateRoute permission={"read-task\n"} />}>
+              <Route path="/admin/tasks" element={<MainLayout />} />
+              {/* <Route path="/admin/tas/:id" element={<DetailShift />} /> */}
             </Route>
             {/* === === === EmploymentStatus Routes === === === */}
             <Route
