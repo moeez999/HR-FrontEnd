@@ -99,3 +99,102 @@ code {
 .ant-picker-footer-extra > div {
   flex-wrap: wrap !important;
 }
+
+textarea {
+  background-color: #f5f4f4;
+}
+input {
+  background-color: #f5f4f4;
+}
+.header {
+  border-top: 3px solid lightgrey;
+}
+.add-task-btn:hover {
+  opacity: 1;
+}
+
+.add-subtask:hover {
+  opacity: 1;
+}
+
+/* .count {
+  border: 1px solid black;
+  border-radius: 50%;
+  padding: 0 0.4rem;
+}
+
+.card {
+  border: 1px solid lightgray;
+  padding: 2rem 1rem 1rem 1rem;
+}
+.subtask-item {
+  border: 1px solid lightgray;
+  padding: 1rem 1rem 1rem 1rem;
+  position: relative;
+  border-radius: 0.2rem;
+}
+.delete-subtask {
+  position: absolute;
+  top: -4px;
+  right: 3px;
+} */
+.task {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.task-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.task-title {
+  margin: 0;
+}
+
+.task-due-date {
+  font-size: 14px;
+  color: #888;
+}
+
+.task-content {
+  margin-bottom: 8px;
+}
+
+.task-description {
+  margin: 0;
+}
+
+.task-assignees {
+  display: flex;
+  margin-top: 8px;
+}
+
+.assignee-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  margin-right: 4px;
+}
+
+.subtasks-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.subtask-item {
+  margin: 0;
+}
+.task-list {
+  margin-top: 16px;
+}
+.app {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 16px;
+}

@@ -172,7 +172,7 @@ function App() {
               <Route path="/admin/shift/:id" element={<DetailShift />} />
             </Route>
             {/* === === === Task Routes === === === */}
-            <Route element={<UserPrivateRoute permission={"read-task\n"} />}>
+            <Route element={<UserPrivateRoute permission={"read-task"} />}>
               <Route path="/admin/tasks" element={<MainLayout />} />
               {/* <Route path="/admin/tas/:id" element={<DetailShift />} /> */}
             </Route>

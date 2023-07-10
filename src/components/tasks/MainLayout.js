@@ -1,5 +1,5 @@
 import React from "react";
-import TaskLayout from "../tasks/taskLayout";
+import TaskLayout from "./taskLayout";
 
 export default function MainLayout() {
   return (

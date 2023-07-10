@@ -14,9 +14,20 @@
 //   );
 // }
 import React, { useState } from "react";
+import { Input } from "antd";
 
 export default function TaskDetails() {
   const [subtasks, setSubtasks] = useState([]);
+  const [task, setTask] = useState([]);
+  const handletaskNameChange = (taskId, newName) => {
+    const updatedtask = task.map((task) => {
+      if (task.id === taskId) {
+        return { ...task, title: newName };
+      }
+      return task;
+    });
+    setTask(updatedtask);
+  };
 
   const handleAddSubtask = () => {
     const newSubtask = { id: subtasks.length + 1, title: "Title" };
@@ -43,7 +54,15 @@ export default function TaskDetails() {
   return (
     <div className="card rounded mt-6 shadow-md">
       <div className="flex flex-row items-center justify-between">
-        <h1>Task Name</h1>
+        <div class="flex flex-col tems-center">
+          <input className="w-full outline-none"></input>
+          <textarea
+            className="text-sm outline-none w-full"
+            type="text"
+            value={task.title}
+            onChange={(e) => handletaskNameChange(task.id, e.target.value)}
+          />
+        </div>
         <p className="rounded-full text-sm">AN</p>
       </div>
       <button

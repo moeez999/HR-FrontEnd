@@ -37,7 +37,6 @@ const Sidenav = ({ color, sideNavOpenKeys }) => {
   const permissions = getPermissions();
   const hasPermission = (item) => {
     if (item === "read-task") {
-      debugger;
       console.log(permissions);
     }
     return permissions.includes(item);
@@ -182,13 +181,13 @@ const Sidenav = ({ color, sideNavOpenKeys }) => {
       ],
     },
 
-    hasPermission("read-task\n") && {
+    hasPermission("read-task") && {
       // {
       label: "Task",
       key: "Task",
       icon: <FormOutlined />,
       children: [
-        hasPermission("read-task\n") && {
+        hasPermission("read-task") && {
           label: (
             <NavLink to="/admin/tasks">
               <span>Task</span>
