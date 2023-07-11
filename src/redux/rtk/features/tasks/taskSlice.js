@@ -11,6 +11,7 @@ const initialState = {
 
 // ADD_shift
 export const addTask = createAsyncThunk("tasks/addTask", async (values) => {
+  // debugger;
   try {
     const { data } = await axios({
       method: "post",
@@ -23,7 +24,7 @@ export const addTask = createAsyncThunk("tasks/addTask", async (values) => {
         ...values,
       },
     });
-    toast.success("tasks Added");
+    toast.success("task Added");
     return {
       data,
       message: "success",

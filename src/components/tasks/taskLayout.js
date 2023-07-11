@@ -6,8 +6,8 @@ import TaskDetails from "../tasks/taskDetails";
 export default function TaskLayout({ taskName }) {
   return (
     <div className="w-full">
-      <TaskListHeader taskName={taskName} />
-      <TasksList />
+      {/* <TaskListHeader taskName={taskName} />
+      <TasksList /> */}
       <TaskDetails />
     </div>
   );

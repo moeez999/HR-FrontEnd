@@ -101,7 +101,7 @@ code {
 }
 
 textarea {
-  background-color: #f5f4f4;
+  background-color: #f5f4f4 !important;
 }
 input {
   background-color: #f5f4f4;

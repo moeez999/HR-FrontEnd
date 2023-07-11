@@ -190,6 +190,7 @@ function CustomTable({ list }) {
 const GetAllCust = (props) => {
   const dispatch = useDispatch();
   const list = useSelector((state) => state.users.list);
+  console.log(list);
 
   useEffect(() => {
     dispatch(loadAllStaff({ status: "true" }));
