@@ -1,129 +1,32 @@
-// // import React from "react";
-
-// // export default function TaskDetails() {
-// //   return (
-// //     <div className="card rounded mt-6 shadow-md ">
-// //       <div class="flex flex-row items-center justify-between">
-// //         <h1>Task Name</h1>
-// //         <p className="rounded-full text-sm">AN</p>
-// //       </div>
-// //       <button className="text-xs opacity-50 mt-10 add-subtask">
-// //         + ADD SUBTASK
-// //       </button>
-// //     </div>
-// //   );
-// // }
-// import React, { useState } from "react";
-// import { Input } from "antd";
-
-// export default function TaskDetails() {
-//   const [subtasks, setSubtasks] = useState([]);
-//   const [task, setTask] = useState([]);
-//   const handletaskNameChange = (taskId, newName) => {
-//     const updatedtask = task.map((task) => {
-//       if (task.id === taskId) {
-//         return { ...task, title: newName };
-//       }
-//       return task;
-//     });
-//     setTask(updatedtask);
-//   };
-
-//   const handleAddSubtask = () => {
-//     const newSubtask = { id: subtasks.length + 1, title: "Title" };
-//     setSubtasks([...subtasks, newSubtask]);
-//   };
-
-//   const handleDeleteSubtask = (subtaskId) => {
-//     const updatedSubtasks = subtasks.filter(
-//       (subtask) => subtask.id !== subtaskId
-//     );
-//     setSubtasks(updatedSubtasks);
-//   };
-
-//   const handleSubtaskNameChange = (subtaskId, newName) => {
-//     const updatedSubtasks = subtasks.map((subtask) => {
-//       if (subtask.id === subtaskId) {
-//         return { ...subtask, title: newName };
-//       }
-//       return subtask;
-//     });
-//     setSubtasks(updatedSubtasks);
-//   };
-
-//   return (
-//     <div className="card rounded mt-6 shadow-md">
-//       <div className="flex flex-row items-center justify-between">
-//         <div class="flex flex-col tems-center">
-//           <input className="w-full outline-none"></input>
-//           <textarea
-//             className="text-sm outline-none w-full"
-//             type="text"
-//             value={task.title}
-//             onChange={(e) => handletaskNameChange(task.id, e.target.value)}
-//           />
-//         </div>
-//         <p className="rounded-full text-sm">AN</p>
-//       </div>
-//       <button
-//         className="text-xs opacity-50 mt-10 add-subtask"
-//         onClick={handleAddSubtask}
-//       >
-//         + ADD SUBTASK
-//       </button>
-//       <div className="subtasks">
-//         {subtasks.map((subtask) => (
-//           <div
-//             key={subtask.id}
-//             className="subtask-item mt-2 flex flex-row justify-between"
-//           >
-//             <textarea
-//               className="text-sm outline-none w-full"
-//               type="text"
-//               value={subtask.title}
-//               onChange={(e) =>
-//                 handleSubtaskNameChange(subtask.id, e.target.value)
-//               }
-//             />
-//             <p className="rounded-full text-sm">AN</p>
-//             <button
-//               className="delete-subtask"
-//               onClick={() => handleDeleteSubtask(subtask.id)}
-//             >
-//               x
-//             </button>
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// }
 import moment from "moment";
 import React, { Fragment, useEffect, useState } from "react";
-import { CSVLink } from "react-csv";
-import { Link } from "react-router-dom";
+// import { CSVLink } from "react-csv";
+// import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import ViewBtn from "../Buttons/ViewBtn";
-import ColVisibilityDropdown from "../Shared/ColVisibilityDropdown";
-import { CsvLinkBtn } from "../UI/CsvLinkBtn";
+// import ViewBtn from "../Buttons/ViewBtn";
+// import ColVisibilityDropdown from "../Shared/ColVisibilityDropdown";
+// import { CsvLinkBtn } from "../UI/CsvLinkBtn";
 import { useDispatch, useSelector } from "react-redux";
-
+import { loadAllStaff } from "../../redux/rtk/features/user/userSlice";
 import UserPrivateComponent from "../PrivateRoutes/UserPrivateComponent";
 // import { PlusOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Select, TimePicker, Typography } from "antd";
+import { Button, Form, Input, Select, TimePicker } from "antd";
 import { addTask } from "./../../redux/rtk/features/tasks/taskSlice";
-import GetAllCust from "../user/GetAllUser";
 
-const AddTask = () => {
+const AddTask = ({ props }) => {
   const [loader, setLoader] = useState(false);
-  const listFromGetAllCust = useSelector((state) => state.users.list);
-  console.log(listFromGetAllCust);
-  // const task = useSelector((state) => state.task.list);
+
   const dispatch = useDispatch();
+  const list = useSelector((state) => state.users.list);
 
   // useEffect(() => {
   //   // dispatch(loadAllTask());
   // }, []);
+  useEffect(() => {
+    dispatch(loadAllStaff({ status: "true" }));
+  }, []);
+
+  console.log(list);
 
   // const { Title } = Typography;
   const [form] = Form.useForm();
@@ -131,15 +34,14 @@ const AddTask = () => {
   const onFinish = async (values) => {
     debugger;
     const taskData = {
-      clientId: values.clientId,
-      taskPrice: values.taskPrice,
-      title: values.title,
-      description: values.description,
-      comments: values.comments,
-      assignee: values.assignee,
-      watchers: values.watchers,
-      startTime: moment(values.startTime).format(),
-      endTime: moment(values.endTime).format(),
+      clientId: values.clientId || "",
+      taskPrice: values.taskPrice || "",
+      title: values.title || "",
+      description: values.description || "",
+      comments: values.comments || "",
+      assigneeId: values.assigneeId || "",
+      startDate: moment(values.startDate).format() || "",
+      endDate: moment(values.endDate).format() || "",
     };
 
     setLoader(true);
@@ -195,7 +97,7 @@ const AddTask = () => {
               },
             ]}
           >
-            <Input />
+            <Input type="number" />
           </Form.Item>
         </UserPrivateComponent>
         <Form.Item
@@ -213,18 +115,9 @@ const AddTask = () => {
         <Form.Item label="Description" name="description">
           <TextArea rows={4} />
         </Form.Item>
-        <Form.Item label="Assignee" name="assignee">
+        <Form.Item label="Assignee" name="assigneeId">
           <Select mode="multiple">
-            {listFromGetAllCust.map((user) => (
-              <Select.Option key={user.id} value={user.id}>
-                {`${user.firstName} ${user.lastName}`}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
-        <Form.Item label="Watchers" name="watchers">
-          <Select mode="multiple">
-            {listFromGetAllCust.map((user) => (
+            {list.map((user) => (
               <Select.Option key={user.id} value={user.id}>
                 {`${user.firstName} ${user.lastName}`}
               </Select.Option>
@@ -234,26 +127,26 @@ const AddTask = () => {
         <Form.Item
           style={{ marginBottom: "10px" }}
           label="Start Time"
-          name="startTime"
-          rules={[
-            {
-              required: true,
-              message: "Please input your task!",
-            },
-          ]}
+          name="startDate"
+          // rules={[
+          //   {
+          //     // required: true,
+          //     message: "Please input your task!",
+          //   },
+          // ]}
         >
           <TimePicker />
         </Form.Item>
         <Form.Item
           style={{ marginBottom: "20px" }}
           label="End Time"
-          name="endTime"
-          rules={[
-            {
-              required: true,
-              message: "Please input your task!",
-            },
-          ]}
+          name="endDate"
+          // rules={[
+          //   {
+          //     // required: true,
+          //     message: "Please input your task!",
+          //   },
+          // ]}
         >
           <TimePicker />
         </Form.Item>
