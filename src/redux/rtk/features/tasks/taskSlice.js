@@ -4,25 +4,43 @@ import { toast } from "react-toastify";
 
 const initialState = {
   list: [],
-  shift: null,
+  task: null,
   error: "",
   loading: false,
 };
 
-// ADD_shift
+// ADD_task
 export const addTask = createAsyncThunk("tasks/addTask", async (values) => {
-  // debugger;
+  let header = {};
+
   try {
+    if (Object.entries(values.attachments).length > 0) {
+      const formValues = new FormData();
+
+      for (let key in values) {
+        if (key === "attachments") {
+          values[key]?.fileList?.forEach((file) => {
+            formValues.append(key, file.originFileObj);
+          });
+        } else {
+          formValues.append(key, values[key]);
+        }
+      }
+
+      values = formValues;
+      header = {
+        "Content-Type": "multipart/form-data",
+      };
+    } else {
+      header = {
+        "Content-Type": "application/json",
+      };
+    }
     const { data } = await axios({
       method: "post",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json;charset=UTF-8",
-      },
+      headers: header,
       url: `tasks/`,
-      data: {
-        ...values,
-      },
+      data: values,
     });
     toast.success("task Added");
     return {
@@ -38,132 +56,106 @@ export const addTask = createAsyncThunk("tasks/addTask", async (values) => {
   }
 });
 
-// // DELETE_shift
-// export const deleteShift = createAsyncThunk("shift/deleteShift", async (id) => {
-//   try {
-//     const resp = await axios({
-//       method: "delete",
-//       headers: {
-//         Accept: "application/json",
-//         "Content-Type": "application/json;charset=UTF-8",
-//       },
-//       url: `shift/${id}`,
-//     });
+// DELETE_task
+export const deleteTask = createAsyncThunk("tasks/deleteTask", async (id) => {
+  try {
+    const resp = await axios({
+      method: "delete",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json;charset=UTF-8",
+      },
+      url: `tasks/${id}`,
+    });
 
-//     toast.success("shift Deleted");
-//     return resp.data.id;
-//   } catch (error) {
-//     toast.error("Error in deleting shift try again");
-//     console.log(error.message);
-//   }
-// });
+    toast.success("task Deleted");
+    return resp.data.id;
+  } catch (error) {
+    toast.error("Error in deleting task try again");
+    console.log(error.message);
+  }
+});
 
-// // shift_DETAILS
-// export const loadSingleShift = createAsyncThunk(
-//   "shift/loadSingleShift",
-//   async (id) => {
-//     try {
-//       const data = await axios.get(`shift/${id}`);
-//       return data;
-//     } catch (error) {
-//       console.log(error.message);
-//     }
-//   }
-// );
+// // task_DETAILS
+export const loadSingleTask = createAsyncThunk(
+  "tasks/loadSingleTask",
+  async (id) => {
+    try {
+      const data = await axios.get(`tasks/${id}`);
+      return data;
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+);
 
-// // shiftS
-// export const loadAllShift = createAsyncThunk("shift/loadAllShift", async () => {
-//   try {
-//     const { data } = await axios.get(`shift?status=true`);
-//     return data;
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// });
+// all tasks
+export const loadAllTasks = createAsyncThunk("tasks/loadAllTask", async () => {
+  try {
+    const { data } = await axios.get(`tasks?status=true`);
+    return data;
+  } catch (error) {
+    console.log(error.message);
+  }
+});
 
-// export const loadAllShiftByEmployee = createAsyncThunk(
-// 	"shift/loadAllShift",
-// 	async () => {
-// 		try {
-// 			const { data } = await axios.get(`shift/employee`);
-// 			return data;
-// 		} catch (error) {
-// 			console.log(error.message);
-// 		}
-// 	}
-// );
+// UPDATE_task
 
-// UPDATE_shift
+export const updateTask = createAsyncThunk(
+  "tasks/updateTask",
+  async ({ id, values }) => {
+    debugger;
 
-// export const updateShift = createAsyncThunk(
-//   "shift/updateShift",
-//   async ({ id, values }) => {
-//     try {
-//       const { data } = await axios({
-//         method: "put",
+    try {
+      const { data } = await axios({
+        method: "put",
 
-//         url: `shift/${id}`,
-//         data: {
-//           ...values,
-//         },
-//       });
-//       toast.success("Shift Updated");
-//       return {
-//         data,
-//         message: "success",
-//       };
-//     } catch (error) {
-//       toast.error("Error in updating shift try again");
-//       console.log(error.message);
-//       return {
-//         message: "error",
-//       };
-//     }
-//   }
-// );
+        url: `tasks/${id}`,
+        data: {
+          ...values,
+        },
+      });
+      toast.success("Task Updated");
+      return {
+        data,
+        message: "success",
+      };
+    } catch (error) {
+      toast.error("Error in updating task try again");
+      console.log(error.message);
+      return {
+        message: "error",
+      };
+    }
+  }
+);
 
 const taskSlice = createSlice({
   name: "task",
   initialState,
   reducers: {
     clearTask: (state) => {
-      state.shift = null;
+      state.task = null;
     },
   },
   extraReducers: (builder) => {
-    // 1) ====== builders for loadAllShift ======
+    // 1) ====== builders for loadAllTasks ======
 
-    // builder.addCase(loadAllShift.pending, (state) => {
-    //   state.loading = true;
-    // });
+    builder.addCase(loadAllTasks.pending, (state) => {
+      state.loading = true;
+    });
 
-    // builder.addCase(loadAllShift.fulfilled, (state, action) => {
-    //   state.loading = false;
-    //   state.list = action.payload;
-    // });
+    builder.addCase(loadAllTasks.fulfilled, (state, action) => {
+      state.loading = false;
+      state.list = action.payload;
+    });
 
-    // builder.addCase(loadAllShift.rejected, (state, action) => {
-    //   state.loading = false;
-    //   state.error = action.payload.message;
-    // });
+    builder.addCase(loadAllTasks.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
 
-    // 1) ====== builders for loadAllShiftByEmployee ======
-
-    // builder.addCase(loadAllShiftByEmployee.pending, (state) => {
-    // 	state.loading = true;
-    // });
-
-    // builder.addCase(loadAllShiftByEmployee.fulfilled, (state, action) => {
-    // 	state.loading = false;
-    // 	state.employee = action.payload;
-    // });
-
-    // builder.addCase(loadAllShiftByEmployee.rejected, (state, action) => {
-    // 	state.loading = false;
-    // 	state.error = action.payload.message;
-    // });
-
-    // 2) ====== builders for addShift ======
+    // 2) ====== builders for addtask ======
 
     builder.addCase(addTask.pending, (state) => {
       state.loading = true;
@@ -185,61 +177,61 @@ const taskSlice = createSlice({
       state.error = action.payload.message;
     });
 
-    // 3) ====== builders for loadSingleShift ======
+    // 3) ====== builders for loadSingletask ======
 
-    // builder.addCase(loadSingleShift.pending, (state) => {
-    //   state.loading = true;
-    // });
+    builder.addCase(loadSingleTask.pending, (state) => {
+      state.loading = true;
+    });
 
-    // builder.addCase(loadSingleShift.fulfilled, (state, action) => {
-    //   state.loading = false;
-    //   state.shift = action.payload.data;
-    // });
+    builder.addCase(loadSingleTask.fulfilled, (state, action) => {
+      state.loading = false;
+      state.task = action.payload;
+    });
 
-    // builder.addCase(loadSingleShift.rejected, (state, action) => {
-    //   state.loading = false;
-    //   state.error = action.payload.message;
-    // });
+    builder.addCase(loadSingleTask.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
 
-    // // 3) ====== builders for updateShift ======
+    // 3) ====== builders for updatetask ======
 
-    // builder.addCase(updateShift.pending, (state) => {
-    //   state.loading = true;
-    // });
+    builder.addCase(updateTask.pending, (state) => {
+      state.loading = true;
+    });
 
-    // builder.addCase(updateShift.fulfilled, (state, action) => {
-    //   state.loading = false;
-    //   const list = [...state.list];
-    //   const index = list.findIndex(
-    //     (shift) => shift.id === parseInt(action.payload.data.id)
-    //   );
-    //   list[index] = action.payload.data;
-    //   state.list = list;
-    // });
+    builder.addCase(updateTask.fulfilled, (state, action) => {
+      state.loading = false;
+      const list = [...state.list];
+      const index = list.findIndex(
+        (task) => task.id === parseInt(action.payload.data.id)
+      );
+      list[index] = action.payload.data;
+      state.list = list;
+    });
 
-    // builder.addCase(updateShift.rejected, (state, action) => {
-    //   state.loading = false;
-    //   state.error = action.payload.message;
-    // });
+    builder.addCase(updateTask.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
 
-    // 4) ====== builders for deleteShift ======
+    // 4) ====== builders for deletetask ======
 
-    // builder.addCase(deleteShift.pending, (state) => {
-    //   state.loading = true;
-    // });
+    builder.addCase(deleteTask.pending, (state) => {
+      state.loading = true;
+    });
 
-    // builder.addCase(deleteShift.fulfilled, (state, action) => {
-    //   state.loading = false;
-    //   const filterShift = state.list.filter(
-    //     (shift) => shift.id !== parseInt(action.payload) && shift
-    //   );
-    //   state.list = filterShift;
-    // });
+    builder.addCase(deleteTask.fulfilled, (state, action) => {
+      state.loading = false;
+      const filterTask = state.list.filter(
+        (task) => task.id !== parseInt(action.payload) && task
+      );
+      state.list = filterTask;
+    });
 
-    // builder.addCase(deleteShift.rejected, (state, action) => {
-    //   state.loading = false;
-    //   state.error = action.payload.message;
-    // });
+    builder.addCase(deleteTask.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+    });
   },
 });
 

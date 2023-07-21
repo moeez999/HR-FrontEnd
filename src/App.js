@@ -67,6 +67,9 @@ import UserPrivateRoute from "./components/PrivateRoutes/UserPrivateRoute";
 import AddAward from "./components/award/AddAward";
 import GetAllAward from "./components/award/GetAllAward";
 import MainLayout from "./components/tasks/MainLayout";
+import Task from "./components/tasks/task";
+import TaskColumns from "./components/tasks/taskcolumns";
+import TaskForm from "./components/tasks/taskcolumns";
 
 function App() {
   return (
@@ -173,9 +176,13 @@ function App() {
             </Route>
             {/* === === === Task Routes === === === */}
             <Route element={<UserPrivateRoute permission={"read-task"} />}>
-              <Route path="/admin/tasks" element={<MainLayout />} />
-              {/* <Route path="/admin/tas/:id" element={<DetailShift />} /> */}
+              <Route path="/admin/createtask" element={<MainLayout />} />
             </Route>
+            <Route>
+              {" "}
+              <Route path="/admin/tasks" element={<TaskForm />} />
+            </Route>
+
             {/* === === === EmploymentStatus Routes === === === */}
             <Route
               element={

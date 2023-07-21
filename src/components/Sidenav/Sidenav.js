@@ -29,16 +29,15 @@ import { NavLink } from "react-router-dom";
 import { disable } from "workbox-navigation-preload";
 import getPermissions from "../../utils/getPermissions";
 import getUserFromToken from "../../utils/getUserFromToken";
+
 // import styles from "./Sidenav.module.css";
+import TaskForm from "./../tasks/taskcolumns";
 
 const Sidenav = ({ color, sideNavOpenKeys }) => {
   const user = getUserFromToken();
 
   const permissions = getPermissions();
   const hasPermission = (item) => {
-    if (item === "read-task") {
-      console.log(permissions);
-    }
     return permissions.includes(item);
   };
 
@@ -181,16 +180,26 @@ const Sidenav = ({ color, sideNavOpenKeys }) => {
       ],
     },
 
-    hasPermission("read-task") && {
-      // {
+    // hasPermission("read-task") && {
+    {
       label: "Task",
       key: "Task",
       icon: <FormOutlined />,
       children: [
         hasPermission("read-task") && {
           label: (
-            <NavLink to="/admin/tasks">
-              <span>Task</span>
+            <NavLink to="/admin/createtask">
+              <span>Create a Task</span>
+            </NavLink>
+          ),
+          key: "newTask",
+          icon: <FileDoneOutlined />,
+        },
+        // hasPermission("read-task") && {
+        {
+          label: (
+            <NavLink to="admin/tasks">
+              <span>Tasks</span>
             </NavLink>
           ),
           key: "newTask",

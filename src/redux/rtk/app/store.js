@@ -17,37 +17,39 @@ import awardHistorySlice from "../features/awardHistory/awardHistorySlice";
 import leavePolicySlice from "../features/leavePolicy/leavePolicySlice";
 import weeklyHolidaySlice from "../features/weeklyHoliday/weeklyHolidaySlice";
 import publicHolidaySlice from "../features/publicHoliday/publicHolidaySlice";
+import taskSlice from "../features/tasks/taskSlice";
 
 const reduxLogger = require("redux-logger");
 const logger = reduxLogger.createLogger();
 
 const store = configureStore({
-	reducer: {
-		users: userReducer,
+  reducer: {
+    users: userReducer,
 
-		dashboard: dashboardReducer,
+    dashboard: dashboardReducer,
 
-		designations: designationReducer,
-		payroll: payrollSlice,
-		payment: paymentSlice,
-		shift: shiftSlice,
-		employmentStatus: employmentStatusSlice,
-		attendance: attendanceReducer,
-		leave: leaveSlice,
-		accounts: accountSlice,
-		transactions: transactionSlice,
-		announcement: announcementSlice,
-		award: awardSlice,
-		awardHistory: awardHistorySlice,
-		leavePolicy: leavePolicySlice,
-		weeklyHoliday: weeklyHolidaySlice,
-		publicHoliday: publicHolidaySlice,
-	},
-	middleware: (getDefaultMiddleware) =>
-		getDefaultMiddleware({
-			serializableCheck: false,
-		}),
-	// middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+    designations: designationReducer,
+    payroll: payrollSlice,
+    payment: paymentSlice,
+    shift: shiftSlice,
+    employmentStatus: employmentStatusSlice,
+    attendance: attendanceReducer,
+    leave: leaveSlice,
+    accounts: accountSlice,
+    transactions: transactionSlice,
+    announcement: announcementSlice,
+    award: awardSlice,
+    awardHistory: awardHistorySlice,
+    leavePolicy: leavePolicySlice,
+    weeklyHoliday: weeklyHolidaySlice,
+    publicHoliday: publicHolidaySlice,
+    task: taskSlice,
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
+  // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
 });
 
 export default store;

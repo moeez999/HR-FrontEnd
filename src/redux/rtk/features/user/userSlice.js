@@ -189,11 +189,11 @@ const userSlice = createSlice({
 
     builder.addCase(addUser.fulfilled, (state, action) => {
       state.loading = false;
-
       if (!Array.isArray(state.user)) {
         state.user = [];
       }
       const user = [...state.user];
+      console.log(user);
       user.push(action.payload.data);
       state.user = user;
     });

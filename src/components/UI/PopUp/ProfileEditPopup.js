@@ -34,6 +34,7 @@ const ProfileEditPopup = ({ data }) => {
   const weeklyHoliday = useSelector((state) => state.weeklyHoliday?.list);
   const shift = useSelector((state) => state.shift?.list);
   const user = useSelector((state) => state.users?.user);
+  console.log(user);
 
   const { id } = useParams("id");
 
